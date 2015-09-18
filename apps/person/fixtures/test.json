@@ -1,0 +1,15 @@
+[
+  {
+		"model": "person.Person",
+		"fields": {
+            "name": "name",
+			"last_name": "last_name",
+            "date_of_birth": "2000-01-01",
+            "bio": "Bio.",
+            "email": "test@example.com",
+            "jabber": "test@example.com",
+            "skype": "test",
+            "other_contacts": "contacts"
+		}
+	}
+]
