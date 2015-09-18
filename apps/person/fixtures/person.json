@@ -1,0 +1,15 @@
+[
+  {
+		"model": "person.Person",
+		"fields": {
+            "name": "Alexandr",
+			"last_name": "Belyaev",
+            "date_of_birth": "1983-07-26",
+            "bio": "Born in July 26 1983 in the city Vinnitsa. From 1990 to 2006 studied first at the school 31 and then in Vinnytskii National Technical University. From 2006 till now work in ISP 'Volia'.",
+            "email": "alwhite1@rambler.ru",
+            "jabber": " alwhite1@khavr.com",
+            "skype": "olexandr.bilyaev",
+            "other_contacts": "email: olexandr.bilyaev@gmail.com, phone: 0637769093"
+		}
+	}
+]
