@@ -50,7 +50,7 @@ class PersonModelTest(TestCase):
         """
         contact = Person(name="new", last_name="new", date_of_birth="2001-02-02", bio="new", email="new", jabber="new", skype="new", other_contacts="new")
         contact.save()
-        contact = Person.objects.get(id=2)
+        contact = Person.objects.last()
         self.assertEqual(contact.name, "new")
         self.assertEqual(contact.last_name, "new")
         self.assertEqual(contact.date_of_birth, datetime.date(2001, 2, 2))
@@ -59,8 +59,8 @@ class PersonModelTest(TestCase):
         self.assertEqual(contact.jabber, "new")
         self.assertEqual(contact.skype, "new")
         self.assertEqual(contact.other_contacts, "new")
-        Person.objects.get(id=2).delete()
-        self.assertEqual(len(Person.objects.all()), 1)
+        Person.objects.last().delete()
+        self.assertEqual(len(Person.objects.all()), 2)
 
     def test_cyrillic_support(self):
         """
@@ -82,11 +82,9 @@ class MainPageAdditionalTest(TestCase):
         Check case what return to template if DB empty.
         """
         if Person.objects.count() > 0:
-            contacts = Person.objects.all
-            for contact in contacts:
-                contact.delete()
-                contact.save()
-        found = resolve('/')
+            contact = Person.objects.all()
+            contact.delete()
+            found = resolve('/')
         self.assertEqual(found.func, main)
 
     def test_main_page_if_in_database_more_that_one_record(self):
@@ -109,11 +107,12 @@ class MainPageAdditionalTest(TestCase):
         """
         Check that data in template and DB same.
         """
-        if not Person.objects.count():
-            contact = Person(name="new", last_name="new", date_of_birth="2001-02-02",
-                             bio="new", email="new", jabber="new", skype="new",
-                             other_contacts="new")
-            contact.save()
+        contact = Person.objects.all()
+        contact.delete()
+        contact = Person(name="new", last_name="new", date_of_birth="2001-02-02",
+                         bio="new", email="new", jabber="new", skype="new",
+                         other_contacts="new")
+        contact.save()
         contact = Person.objects.last()
         client = Client()
         response = client.get("/")

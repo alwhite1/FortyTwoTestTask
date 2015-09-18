@@ -1,0 +1,33 @@
+[
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "admin", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2015-09-18T19:37:50.731Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$93YoBz1x0RjW$1nCC+0mYHcphpQoua29nZVnBXsz1DigitCgE0DVkAdw=", 
+        "email": "admin@example.com", 
+        "date_joined": "2015-09-18T19:37:50.731Z"
+    }
+},
+  {
+		"model": "person.Person",
+		"fields": {
+            "name": "Alexandr",
+			"last_name": "Belyaev",
+            "date_of_birth": "1983-07-26",
+            "bio": "Born in July 26 1983 in the city Vinnitsa. From 1990 to 2006 studied first at the school 31 and then in Vinnytskii National Technical University. From 2006 till now work in ISP 'Volia'.",
+            "email": "alwhite1@rambler.ru",
+            "jabber": " alwhite1@khavr.com",
+            "skype": "olexandr.bilyaev",
+            "other_contacts": "email: olexandr.bilyaev@gmail.com, phone: 0637769093"
+		}
+	}
+]

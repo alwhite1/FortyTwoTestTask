@@ -128,3 +128,8 @@ TEMPLATE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
+
+# Add fixture dir for common fixtures
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, 'fixtures'),
+)
