@@ -30,14 +30,14 @@ def check_content_in_template(contact):
 
 
 def get_person_object(kind):
-    object_array = (Person(name="new",
-                           last_name="new",
+    object_array = (Person(name=u"new",
+                           last_name=u"new",
                            date_of_birth="2001-02-02",
-                           bio="new",
-                           email="new@example.com",
-                           jabber="new@example.com",
-                           skype="new",
-                           other_contacts="new"),
+                           bio=u"new",
+                           email=u"new@example.com",
+                           jabber=u"new@example.com",
+                           skype=u"new",
+                           other_contacts=u"new"),
                     Person(name=u"Имя",
                            last_name=u"Фамилия",
                            date_of_birth="2001-02-02",
@@ -129,7 +129,7 @@ class PersonModelTest(TestCase):
         contact.save()
         contact = Person.objects.last()
         check_data = get_check_data("simple2")
-        check_db_content(contact, check_data)
+        self.assertEqual(check_db_content(contact, check_data), True)
         Person.objects.last().delete()
         self.assertEqual(len(Person.objects.all()), 2)
 
