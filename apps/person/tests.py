@@ -15,6 +15,7 @@ def check_db_content(contact, check_data):
             return False
     return True
 
+
 def check_content_in_template(contact):
     attributes = ("name", "last_name", "email", "jabber", "skype", "other_contacts")
     client = Client()
@@ -26,6 +27,67 @@ def check_content_in_template(contact):
             print content
             return False
     return True
+
+
+def get_person_object(kind):
+    object_array = (Person(name="new",
+                           last_name="new",
+                           date_of_birth="2001-02-02",
+                           bio="new",
+                           email="new@example.com",
+                           jabber="new@example.com",
+                           skype="new",
+                           other_contacts="new"),
+                    Person(name=u"Имя",
+                           last_name=u"Фамилия",
+                           date_of_birth="2001-02-02",
+                           bio=u"Биография",
+                           email=u"new@example.com",
+                           jabber=u"new@example.com",
+                           skype=u"new",
+                           other_contacts=u"new"),
+                    )
+    if kind == "cyrillic":
+        return object_array[1]
+    elif kind == "simple":
+        return object_array[0]
+
+
+def get_check_data(kind):
+    check_data_tuple = ({"name": u"name",
+                         "last_name": u"last_name",
+                         "date_of_birth": u"2000-01-01",
+                         "bio": u"Bio.",
+                         "email": u"test@example.com",
+                         "jabber": u"test@example.com",
+                         "skype": u"test",
+                         "other_contacts": u"contacts"
+                         },
+                        {"name": u"new",
+                         "last_name": u"new",
+                         "date_of_birth": u"2001-02-02",
+                         "bio": u"new",
+                         "email": u"new@example.com",
+                         "jabber": u"new@example.com",
+                         "skype": u"new",
+                         "other_contacts": u"new"
+                         },
+                        {"name": u"Имя",
+                         "last_name": u"Фамилия",
+                         "date_of_birth": "2001-02-02",
+                         "bio": u"Биография",
+                         "email": u"new@example.com",
+                         "jabber": u"new@example.com",
+                         "skype": u"new",
+                         "other_contacts": u"new"
+                         }
+                        )
+    if kind == "simple1":
+        return check_data_tuple[0]
+    elif kind == "simple2":
+        return check_data_tuple[1]
+    elif kind == "cyrillic":
+        return check_data_tuple[2]
 
 
 class MainPageTest(TestCase):
@@ -56,36 +118,18 @@ class PersonModelTest(TestCase):
         Check DB for get info.
         """
         contact = Person.objects.last()
-        check_data = {"name": "name",
-                      "last_name": u"last_name",
-                      "date_of_birth": u"2000-01-01",
-                      "bio": u"Bio.",
-                      "email": u"test@example.com",
-                      "jabber": u"test@example.com",
-                      "skype": u"test",
-                      "other_contacts": u"contacts"
-                      }
-
+        check_data = get_check_data("simple1")
         self.assertEqual(check_db_content(contact, check_data), True)
 
     def test_add_new_person_and_delete(self):
         """
         Check can add and delete date from DB.
         """
-        contact = Person(name="new", last_name="new", date_of_birth="2001-02-02", bio="new",
-                         email="new@example.com", jabber="new@example.com", skype="new", other_contacts="new")
+        contact = get_person_object("simple")
         contact.save()
         contact = Person.objects.last()
-        check_data = {"name": u"new",
-                      "last_name": u"new",
-                      "date_of_birth": u"2001-02-02",
-                      "bio": u"new",
-                      "email": u"new@example.com",
-                      "jabber": u"new@example.com",
-                      "skype": u"new",
-                      "other_contacts": u"new"
-                      }
-        check_db_content(contact,check_data)
+        check_data = get_check_data("simple2")
+        check_db_content(contact, check_data)
         Person.objects.last().delete()
         self.assertEqual(len(Person.objects.all()), 2)
 
@@ -94,23 +138,8 @@ class PersonModelTest(TestCase):
         Check support DB for cyrillic language.
         """
 
-        contact = Person(name="Имя",
-                         last_name="Фамилия",
-                         date_of_birth="2001-02-02",
-                         bio="Биография",
-                         email="new@example.com",
-                         jabber="new@example.com",
-                         skype="new",
-                         other_contacts="new")
-        check_data = {"name": u"Имя",
-                      "last_name": u"Фамилия",
-                      "date_of_birth": "2001-02-02",
-                      "bio": u"Биография",
-                      "email": u"new@example.com",
-                      "jabber": u"new@example.com",
-                      "skype": u"new",
-                      "other_contacts": u"new"
-                      }
+        contact = get_person_object("cyrillic")
+        check_data = get_check_data("cyrillic")
         contact.save()
         contact = Person.objects.last()
         self.assertEqual(check_db_content(contact, check_data), True)
@@ -119,17 +148,11 @@ class PersonModelTest(TestCase):
         """
         Check rendering cyrillic to template
         """
-        contact = Person(name=u"Имя",
-                         last_name=u"Фамилия",
-                         date_of_birth="2001-02-02",
-                         bio=u"Биография",
-                         email=u"new",
-                         jabber=u"new",
-                         skype=u"new",
-                         other_contacts=u"new")
+        contact = get_person_object("cyrillic")
         contact.save()
         contact = Person.objects.last()
         self.assertEqual(check_content_in_template(contact), True)
+
 
 class MainPageAdditionalTest(TestCase):
 
@@ -149,14 +172,9 @@ class MainPageAdditionalTest(TestCase):
         """
         counter = 1
         while Person.objects.count() <= 1:
-            contact = Person(name="new" + str(counter),
-                             last_name="new" + str(counter),
-                             date_of_birth="2001-02-02",
-                             bio="new",
-                             email="new",
-                             jabber="new",
-                             skype="new",
-                             other_contacts="new")
+            contact = get_person_object("simple")
+            contact.name += str(counter)
+            contact.last_name += str(counter)
             contact.save()
             counter += 1
         contact_new = Person.objects.last()
@@ -168,14 +186,7 @@ class MainPageAdditionalTest(TestCase):
         """
         contact = Person.objects.all()
         contact.delete()
-        contact = Person(name="new",
-                         last_name="new",
-                         date_of_birth="2001-02-02",
-                         bio="new",
-                         email="new",
-                         jabber="new",
-                         skype="new",
-                         other_contacts="new")
+        contact = get_person_object("simple")
         contact.save()
         contact = Person.objects.last()
         self.assertEqual(check_content_in_template(contact), True)
@@ -183,4 +194,3 @@ class MainPageAdditionalTest(TestCase):
         contact.save()
         contact = Person.objects.last()
         self.assertEqual(check_content_in_template(contact), True)
-
