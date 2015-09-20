@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %} 0 {% endblock title %}
+{% block extra_head %}
+    {% load staticfiles %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="{% static 'js/requests.js' %}"></script>
+{% endblock extra_head %}
+{% block content %}
+<div id="content">
+<header> Quantity of request: <span id="quantity">{{ quantity_of_request }} </span> </header>
+<table>
+     <tr>
+        <th> ID </th>
+        <th> Request </th>
+        <th> Date </th>
+    </tr>
+    {%  for id, request , date in requests.values_list %}
+<tr>
+    <td id="id_{{ forloop.counter }}"> {{ id }} </td>
+    <td id="request_{{  forloop.counter }}">{{request}}</td>
+    <td id="date_{{ forloop.counter }} ">{{date}}</tdid>
+</tr>
+{% endfor %}
+</table>
+<div id="link" ><hr><a href="/">back</a></div>
+</div>
+{% endblock %}
