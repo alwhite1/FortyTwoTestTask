@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %} Edit. {% endblock title %}
+{% block extra_head %}
+    {% load staticfiles %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="{% static 'js/edit.js' %}"></script>
+<script type="text/javascript" src="http://malsup.github.com/min/jquery.form.min.js"></script>
+{% endblock extra_head %}
+{% block content %}
+<header> 42 Coffee Cups Test Assignment
+<div id="auth_info">
+				{% if user.is_authenticated %}
+				Login: {{ user.username }} <a href="/accounts/logout/?next=/"><br>Exit</a>
+                {% endif %}
+			 </div>
+</header>
+<form id="form_edit" enctype="multipart/form-data" action="/edit/" method="post">
+{% csrf_token %}
+<div id='left'>
+    <p>{{form.name.label}}<span class="input_field_left">{{form.name}}</span></p>
+    <p>{{form.last_name.label}}<span class="input_field_left">{{form.last_name}}</span></p>
+    <p>{{form.date_of_birth.label}}<span class="input_field_left">{{form.date_of_birth}}</span></p>
+    <p>{{form.photo.label}}<span class="input_field_left">{{form.photo}}</span></p>
+</div>
+<div id='right'>
+    <p>{{form.email.label}}<span class="input_field_right">{{form.email}}</span></p>
+    <p>{{form.jabber.label}}<span class="input_field_right">{{form.jabber}}</span></p>
+    <p>{{form.skype.label}}<span class="input_field_right">{{form.skype}}</span></p>
+</div>
+<div id="edit_textarea">
+    <p>{{form.other_contacts.label}}<br><span class="input_field_right_textarea">{{form.other_contacts}}</span></p>
+    <p><span id="bio_label">{{form.bio.label}}</span><br><span class="input_field_right_textarea">{{form.bio}}</span></p>
+</div>
+ <div id="edit_status">
+    <div id="loading" style="display:none;">
+        <span id="load_text">loading</span>
+    </div>
+    <div id="form_edit_success" style="display:none;">
+        <span>Changes have been save.</span>
+    </div>
+    <div id="form_edit_error" style="display:none;">
+        <span>Can not submit data due to errors.</span>
+    </div>
+</div>
+<p id="edit_action"><input type="submit" value="Save"> <a href="/">Cancel</a></p>
+</form>
+<div id="link" > <hr> <a href="/requests">requests</a></div>
+<img id="photo_preview" src="/uploads/{{ form.photo.value }}">
+{% endblock %}
