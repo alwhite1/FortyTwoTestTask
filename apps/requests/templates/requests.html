@@ -6,8 +6,9 @@
 <script type="text/javascript" src="{% static 'js/requests.js' %}"></script>
 {% endblock extra_head %}
 {% block content %}
-<div id="content">
+
 <header> Quantity of request: <span id="quantity">{{ quantity_of_request }} </span> </header>
+    <div id="content">
 <table>
      <tr>
         <th> ID </th>
@@ -22,6 +23,6 @@
 </tr>
 {% endfor %}
 </table>
-<div id="link" ><hr><a href="/">back</a></div>
 </div>
+<div id="link" ><hr><a href="/">back</a></div>
 {% endblock %}
