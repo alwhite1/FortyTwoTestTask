@@ -19,7 +19,7 @@ def requests(request):
         last_10_requests = Requests.objects.all()[len(Requests.objects.all()) - 10:]
         quantity_of_request = len(Requests.objects.all())
         return render(request, 'requests.html', {'requests': last_10_requests,
-                                                'quantity_of_request': quantity_of_request})
+                                                 'quantity_of_request': quantity_of_request})
     last_10_requests = Requests.objects.all()
     quantity_of_request = len(Requests.objects.all())
     return render(request, 'requests.html', {'requests': last_10_requests,
