@@ -1,18 +1,24 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
-from requests.views import requests_page
+from apps.requests.views import requests
 from requests.models import Requests
 from django.test.client import Client
+
+
+def send_request(number_of_request):
+    client = Client()
+    for i in xrange(0, int(number_of_request)):
+        client.get('/')
 
 
 class RequestsPageTest(TestCase):
     def test_url_resolves_to_request_page(self):
         found = resolve('/requests/')
-        self.assertEqual(found.func, requests_page)
+        self.assertEqual(found.func, requests)
 
     def test_correct_requests_page_template(self):
         response = self.client.get('/requests/')
-        self.assertTemplateUsed(response, 'requests_page.html')
+        self.assertTemplateUsed(response, 'requests.html')
 
     def test_is_data_in_template_and_database_same(self):
         if not Requests.objects.count():
@@ -28,9 +34,10 @@ class RequestsPageTest(TestCase):
         response = client.get("/requests/")
         self.assertContains(response, request.request)
 
+
 class RequestsModelTest(TestCase):
 
-    fixtures = ['requests/fixtures/test_request.json']
+    fixtures = ['apps/requests/fixtures/test_request.json']
 
     def test_for_existing_request(self):
         requests = Requests.objects.get(id=1)
@@ -45,12 +52,12 @@ class RequestsModelTest(TestCase):
         Requests.objects.get(id=2).delete()
         self.assertEqual(len(Requests.objects.all()), 1)
 
+
 class RequestsMiddlewareTest(TestCase):
-    fixtures = ['requests/fixtures/test_request.json', 'person/fixtures/person.json']
+    fixtures = ['apps/requests/fixtures/test_request.json', 'apps/person/fixtures/person.json']
 
     def test_request_middleware(self):
-        for i in xrange(0, 5):
-            self.client.get('/')
+        send_request(5)
         count = len(Requests.objects.all())
         self.assertEqual(count, 6)
 
@@ -62,12 +69,21 @@ class RequestsMiddlewareTest(TestCase):
         response = client.get("/requests/")
         self.assertContains(response, "POST")
 
+
 class RequestFromAjax(TestCase):
-    fixtures = ['requests/fixtures/test_request.json', 'person/fixtures/person.json']
+    fixtures = ['apps/requests/fixtures/test_request.json', 'apps/person/fixtures/person.json']
 
     def test_correct_response_for_request_quantity(self):
-        start_request = int(self.client.post('/requests/').getvalue())
-        for i in xrange(0, 5):
-            self.client.get('/')
-        end_request = int(self.client.post('/requests/').getvalue())
+        start_request = int(self.client.post('/requests/').content)
+        send_request(5)
+        end_request = int(self.client.post('/requests/').content)
         self.assertEqual(end_request - start_request, 6)
+
+    def test_correct_response_for_request_diff(self):
+        start_request = int(self.client.post('/requests/').content)
+        send_request(5)
+        diff = int(self.client.post('/requests/', {'start_request': start_request},
+                                    **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}).content)
+        self.assertEqual(diff, 5)
+
+
