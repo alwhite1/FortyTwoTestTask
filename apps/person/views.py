@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from apps.person.models import Person
+from apps.person.forms import EditPersonModelForm
+from django.http import HttpResponse, HttpResponseBadRequest
+import json
+from django.contrib.auth.views import login_required
 
 
 def main(request):
@@ -9,3 +13,36 @@ def main(request):
         person = {"name": "Name", "last_name": "Last name",
                   "date_of_birth": "Date of birth"}
     return render(request, 'main.html', {"person": person})
+
+
+@login_required
+def edit(request):
+    if request.POST:
+        if Person.objects.count() > 0:
+            form = EditPersonModelForm(request.POST, files=request.FILES, instance=Person.objects.last())
+        else:
+            form = EditPersonModelForm(request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            if request.is_ajax():
+                return HttpResponse('OK')
+            else:
+                return HttpResponse('Fail')
+
+        else:
+            if request.is_ajax():
+                errors_dict = {}
+                if form.errors:
+                    for error in form.errors:
+                        e = form.errors[error]
+                        errors_dict[error] = unicode(e)
+
+                return HttpResponseBadRequest(json.dumps(errors_dict))
+            else:
+                return HttpResponse('Fail')
+    else:
+        if Person.objects.count():
+            form = EditPersonModelForm(instance=Person.objects.last())
+        else:
+            form = EditPersonModelForm()
+        return render(request, 'edit.html', {'form': form})

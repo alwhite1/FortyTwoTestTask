@@ -194,3 +194,33 @@ class MainPageAdditionalTest(TestCase):
         contact.save()
         contact = Person.objects.last()
         self.assertEqual(check_content_in_template(contact), True)
+
+class EditPersonModelFormTest(TestCase):
+
+    fixtures = ['person/fixtures/test.json']
+
+    def test_valid_data(self):
+
+        form = EditPersonModelForm({
+            'name': "John",
+            'last_name': "Smith",
+            'date_of_birth': '2000-01-01',
+            'bio': "new bio",
+            'email': "john_smith@example.com",
+            'jabber': "john_smith@example.com",
+            'skype': "john_smith",
+            'other_contacts': "phone",
+            'photo': "/bla/bla/bla.jpg"
+        }, instance=Person.objects.get(id=1))
+        self.assertTrue(form.is_valid())
+        form.save()
+        person = Person.objects.get(id=1)
+        self.assertEqual(person.name, "John")
+        self.assertEqual(person.last_name, "Smith")
+        self.assertEqual(person.email, "john_smith@example.com")
+        self.assertEqual(person.date_of_birth, datetime.date(2000, 1, 1))
+        self.assertEqual(person.bio, "new bio")
+        self.assertEqual(person.jabber, "john_smith@example.com")
+        self.assertEqual(person.skype, "john_smith")
+        self.assertEqual(person.other_contacts, "phone")
+        self.assertEqual(person.photo, "/bla/bla/bla.jpg")

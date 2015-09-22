@@ -1,3 +1,9 @@
+html, body {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    }
+
 #title {
 position: absolute;
 left: 15px;
@@ -20,9 +26,90 @@ width: 300px;
     border: none;
     resize: none;
 }
-#link {
+#content{
     position: absolute;
+    top: 30px;
+    width: 99%;
+    height: 93%;
+    overflow-y: auto;
+}
+#link {
+    position: fixed;
     height: 15;
-    bottom: 0;
+    bottom: 0px;
     width: 100%;
+}
+header {
+    position: fixed;
+    top: 0;
+    height: 30px;
+    width: 100%;
+}
+tbody{
+    position: absolute;
+    height: auto;
+}
+tr:hover td {
+    background: #e8edff;
+}
+thead{
+    position: fixed;
+}
+#edit_textarea {
+    position: absolute;
+    top: 180px;
+    left: 400px;
+}
+.input_field_left{
+    position: absolute;
+    left: 120px;
+
+}
+.input_field_right{
+    position: absolute;
+    left: 70px;
+}
+#bio_label{
+    position: absolute;
+    left:60px;
+}
+#edit_action{
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+}
+#edit_status{
+    position: absolute;
+    bottom: 60px;
+    left: 15px;
+}
+#auth{
+    position: absolute;
+    left: 15px;
+    top: 30px;
+}
+#login_button{
+    position: absolute;
+    left: 90px;
+    top: 90px;
+}
+#auth_info{
+    position: absolute;
+    top: 15px;
+    right: 0;
+    margin-right: 35px;
+    bottom: 0;
+    text-align: right;
+}
+#photo_preview {
+    position: absolute;
+    top: 240px;
+    left: 15px;
+    width: 300px;
+}
+#photo {
+    position: absolute;
+    top: 200px;
+    left: 15px;
+    width: 300px;
 }

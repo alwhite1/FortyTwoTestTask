@@ -7,8 +7,7 @@
     <p id="name"> {{ person.name }}</p>
     <p id="last_name">{{ person.last_name }}</p>
     <p id="date_of_birth"> {{ person.date_of_birth }} </p>
-    <p id="bio"> Bio:<br> <textarea rows="10" cols="40" class="textarea_as_view" readonly>{{ person.bio }}</textarea></p>
-</div>
+    </div>
 
 
 <div id="right" >
@@ -16,8 +15,13 @@
      <p id="email"> Email: {{ person.email }} </p>
      <p id="jabber"> Jabber: {{ person.jabber }}  </p>
      <p id="skype"> Skype: {{ person.skype }} </p>
-     <p id="other_contacts" > Other contacts:<br> <textarea class="textarea_as_view" rows="10" cols="40" readonly>{{ person.other_contacts }}</textarea></p>
+
 
 </div>
-    <div id="link" > <hr> <a href="/requests">requests</a>  </div>
+    <div id="edit_textarea">
+    <p id="other_contacts" > Other contacts:<br> <textarea class="textarea_as_view" rows="10" cols="40" readonly>{{ person.other_contacts }}</textarea></p>
+    <p id="bio"> Bio:<br> <textarea rows="10" cols="40" class="textarea_as_view" readonly>{{ person.bio }}</textarea></p>
+    </div>
+    <div id="link" > <hr> <a href="/requests">requests</a>  <a href="/edit">edit</a> </div>
+    <img id="photo" src="/uploads/{{ person.photo }}">
 {% endblock %}
