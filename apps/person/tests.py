@@ -146,7 +146,7 @@ class PersonModelTest(TestCase):
 
     def test_cyrillic_rendering(self):
         """
-        Check rendering cyrillic to template
+        Check rendering cyrillic to template.
         """
         contact = get_person_object("cyrillic")
         contact.save()
