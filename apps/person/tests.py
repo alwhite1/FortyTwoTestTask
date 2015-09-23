@@ -2,6 +2,7 @@
 from django.test import TestCase
 from apps.person.views import main
 from apps.person.models import Person
+from apps.person.forms import EditPersonModelForm
 from django.core.urlresolvers import resolve
 from django.test.client import Client
 
@@ -80,7 +81,18 @@ def get_check_data(kind):
                          "jabber": u"new@example.com",
                          "skype": u"new",
                          "other_contacts": u"new"
-                         }
+                         },
+                        {
+                        'name': "John",
+                        'last_name': "Smith",
+                        'date_of_birth': '2000-01-01',
+                        'bio': "new bio",
+                        'email': "john_smith@example.com",
+                        'jabber': "john_smith@example.com",
+                        'skype': "john_smith",
+                        'other_contacts': "phone",
+                        'photo': "/bla/bla/bla.jpg"
+                        }
                         )
     if kind == "simple1":
         return check_data_tuple[0]
@@ -88,6 +100,8 @@ def get_check_data(kind):
         return check_data_tuple[1]
     elif kind == "cyrillic":
         return check_data_tuple[2]
+    elif kind == "form":
+        return check_data_tuple[3]
 
 
 class MainPageTest(TestCase):
@@ -197,30 +211,22 @@ class MainPageAdditionalTest(TestCase):
 
 class EditPersonModelFormTest(TestCase):
 
-    fixtures = ['person/fixtures/test.json']
+    fixtures = ['apps/person/fixtures/test.json']
 
     def test_valid_data(self):
 
-        form = EditPersonModelForm({
-            'name': "John",
-            'last_name': "Smith",
-            'date_of_birth': '2000-01-01',
-            'bio': "new bio",
-            'email': "john_smith@example.com",
-            'jabber': "john_smith@example.com",
-            'skype': "john_smith",
-            'other_contacts': "phone",
-            'photo': "/bla/bla/bla.jpg"
-        }, instance=Person.objects.get(id=1))
+        form = EditPersonModelForm(get_check_data("form"), instance=Person.objects.last())
+        if not form.is_valid():
+            errors_dict = {}
+            if form.errors:
+                for error in form.errors:
+                    e = form.errors[error]
+                    errors_dict[error] = unicode(e)
+            print e
+        else:
+            print "Valid"
+
         self.assertTrue(form.is_valid())
         form.save()
-        person = Person.objects.get(id=1)
-        self.assertEqual(person.name, "John")
-        self.assertEqual(person.last_name, "Smith")
-        self.assertEqual(person.email, "john_smith@example.com")
-        self.assertEqual(person.date_of_birth, datetime.date(2000, 1, 1))
-        self.assertEqual(person.bio, "new bio")
-        self.assertEqual(person.jabber, "john_smith@example.com")
-        self.assertEqual(person.skype, "john_smith")
-        self.assertEqual(person.other_contacts, "phone")
-        self.assertEqual(person.photo, "/bla/bla/bla.jpg")
+        contact = Person.objects.last()
+        self.assertEqual(check_db_content(contact, get_check_data("form")), True)
