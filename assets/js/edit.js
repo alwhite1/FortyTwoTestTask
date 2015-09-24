@@ -1,8 +1,10 @@
 $(document).ready(function() {
+            $('#edit_day_of_birth').datepicker({changeYear:true, changeMonth:true, dateFormat:'yy-mm-dd'});
             $( "#edit_photo" ).change(function() {
                 var new_photo = window.URL.createObjectURL(this.files[0])
                 $('#photo_preview').attr('src', new_photo)
             });
+
             function block_form() {
                 $("#loading").show();
                 $('textarea').attr('disabled', 'disabled');

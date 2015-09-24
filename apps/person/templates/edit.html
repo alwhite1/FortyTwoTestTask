@@ -2,15 +2,18 @@
 {% block title %} Edit. {% endblock title %}
 {% block extra_head %}
     {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'css/jquery-ui.structure.css'%}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.theme.css'%}">
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="{% static 'js/edit.js' %}"></script>
 <script type="text/javascript" src="http://malsup.github.com/min/jquery.form.min.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
 {% endblock extra_head %}
 {% block content %}
 <header> 42 Coffee Cups Test Assignment
 <div id="auth_info">
 				{% if user.is_authenticated %}
-				Login: {{ user.username }} <a href="/accounts/logout/?next=/"><br>Exit</a>
+				Login: {{ user.username }} <a href="/accounts/logout/?next=/">Exit</a>
                 {% endif %}
 			 </div>
 </header>

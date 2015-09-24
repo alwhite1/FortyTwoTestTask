@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% block title %} Contact. {% endblock title %}
 {% block content %}
 <p id="title" > 42 Coffee Cups Test Assignment </p>
+    <div id="content">
 <div id="left" >
     <br>
     <br>
@@ -22,6 +24,8 @@
     <p id="other_contacts" > Other contacts:<br> <textarea class="textarea_as_view" rows="10" cols="40" readonly>{{ person.other_contacts }}</textarea></p>
     <p id="bio"> Bio:<br> <textarea rows="10" cols="40" class="textarea_as_view" readonly>{{ person.bio }}</textarea></p>
     </div>
-    <div id="link" > <hr> <a href="/requests">requests</a>  <a href="/edit">edit</a> </div>
     <img id="photo" src="/uploads/{{ person.photo }}">
+</div>
+    <div id="link" > <hr> <a href="/requests">requests</a>  <a href="/edit">edit</a> </div>
+
 {% endblock %}

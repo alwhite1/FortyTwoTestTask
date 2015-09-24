@@ -22,4 +22,4 @@ class EditPersonModelForm(forms.ModelForm):
                             label=u'Skype: ')
     other_contacts = forms.CharField(widget=forms.Textarea(attrs={'id': 'edit_other_contacts'}),
                                      label=u'Other contacts:')
-    photo = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'edit_photo'}), label=u'Photo: ')
+    photo = forms.ImageField(widget=forms.FileInput(attrs={'id': 'edit_photo'}), label=u'Photo: ')
