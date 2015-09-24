@@ -95,6 +95,17 @@ def get_check_data(kind):
                         'skype': "john_smith",
                         'other_contacts': "phone",
                         'photo': 'test.jpg'
+                        },
+                        {
+                        "name": u"Имя",
+                        "last_name": u"Фамилия",
+                        "date_of_birth": "2001-02-02",
+                        "bio": u"Биография",
+                        "email": u"new@example.com",
+                        "jabber": u"new@example.com",
+                        "skype": u"new",
+                        "other_contacts": u"new",
+                        'photo': 'тест.jpg'
                         }
                         )
     if kind == "simple1":
@@ -105,15 +116,17 @@ def get_check_data(kind):
         return check_data_tuple[2]
     elif kind == "form":
         return check_data_tuple[3]
+    elif kind == "form_cyrillic":
+        return check_data_tuple[4]
 
 
-def get_temp_photo():
+def get_temp_photo(photo_name):
     io = StringIO.StringIO()
     size = (300, 300)
     color = (255, 0, 0, 0)
     image = Image.new("RGBA", size, color)
     image.save(io, format='JPEG')
-    image_file = InMemoryUploadedFile(io, None, 'test.jpg', 'jpeg', io.len, None)
+    image_file = InMemoryUploadedFile(io, None, photo_name, 'jpeg', io.len, None)
     image_file.seek(0)
     return image_file
 
@@ -232,7 +245,35 @@ class EditPersonModelFormTest(TestCase):
         """
         Check form for correct work.
         """
-        photo_file = get_temp_photo()
-        form = EditPersonModelForm(get_check_data("form"), {"photo": photo_file},
-                                   instance=Person.objects.last())
+        photo_file = get_temp_photo('test.jpg')
+        form = EditPersonModelForm(get_check_data("form"), {"photo": photo_file})
         self.assertTrue(form.is_valid())
+
+    def test_data_in_cyrillic(self):
+        """
+        Check form for correct work with cyrillic data.
+        """
+        photo_file = get_temp_photo('тест.jpg')
+        form = EditPersonModelForm(get_check_data("form_cyrillic"), {"photo": photo_file})
+        self.assertTrue(form.is_valid())
+
+
+class EditPageTest(TestCase):
+
+    def test_form_return_all_field_to_template(self):
+        """
+        Check that all form field represent in edit page
+        """
+        pass
+
+    def test_login_require(self):
+        """
+        Check that edit page require login
+        """
+        pass
+
+    def test_login_availability(self):
+        """
+        Check that can login.
+        """
+        pass

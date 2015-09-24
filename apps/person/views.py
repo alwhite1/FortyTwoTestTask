@@ -46,3 +46,4 @@ def edit(request):
         else:
             form = EditPersonModelForm()
         return render(request, 'edit.html', {'form': form})
+    pass
