@@ -29,7 +29,6 @@ def edit(request):
                 return HttpResponse('OK')
             else:
                 return HttpResponse('Fail')
-
         else:
             if request.is_ajax():
                 errors_dict = {}

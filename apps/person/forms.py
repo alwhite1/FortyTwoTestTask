@@ -1,6 +1,7 @@
 from django import forms
 from person.models import Person
 
+
 class EditPersonModelForm(forms.ModelForm):
     class Meta:
         model = Person

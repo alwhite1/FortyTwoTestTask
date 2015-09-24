@@ -5,6 +5,9 @@ from apps.person.models import Person
 from apps.person.forms import EditPersonModelForm
 from django.core.urlresolvers import resolve
 from django.test.client import Client
+import StringIO
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 def check_db_content(contact, check_data):
@@ -91,7 +94,7 @@ def get_check_data(kind):
                         'jabber': "john_smith@example.com",
                         'skype': "john_smith",
                         'other_contacts': "phone",
-                        'photo': "/bla/bla/bla.jpg"
+                        'photo': 'test.jpg'
                         }
                         )
     if kind == "simple1":
@@ -102,6 +105,17 @@ def get_check_data(kind):
         return check_data_tuple[2]
     elif kind == "form":
         return check_data_tuple[3]
+
+
+def get_temp_photo():
+    io = StringIO.StringIO()
+    size = (300, 300)
+    color = (255, 0, 0, 0)
+    image = Image.new("RGBA", size, color)
+    image.save(io, format='JPEG')
+    image_file = InMemoryUploadedFile(io, None, 'test.jpg', 'jpeg', io.len, None)
+    image_file.seek(0)
+    return image_file
 
 
 class MainPageTest(TestCase):
@@ -209,24 +223,16 @@ class MainPageAdditionalTest(TestCase):
         contact = Person.objects.last()
         self.assertEqual(check_content_in_template(contact), True)
 
+
 class EditPersonModelFormTest(TestCase):
 
     fixtures = ['apps/person/fixtures/test.json']
 
     def test_valid_data(self):
-
-        form = EditPersonModelForm(get_check_data("form"), instance=Person.objects.last())
-        if not form.is_valid():
-            errors_dict = {}
-            if form.errors:
-                for error in form.errors:
-                    e = form.errors[error]
-                    errors_dict[error] = unicode(e)
-            print e
-        else:
-            print "Valid"
-
+        """
+        Check form for correct work.
+        """
+        photo_file = get_temp_photo()
+        form = EditPersonModelForm(get_check_data("form"), {"photo": photo_file},
+                                   instance=Person.objects.last())
         self.assertTrue(form.is_valid())
-        form.save()
-        contact = Person.objects.last()
-        self.assertEqual(check_db_content(contact, get_check_data("form")), True)
