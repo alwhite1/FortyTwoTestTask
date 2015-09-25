@@ -3,7 +3,12 @@ from django.db import models
 from PIL import Image, ImageOps
 import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+import os
+from django.conf import settings
 
+def make_upload_path(filename):
+        return u"".join(os.path.split(settings.BASE_DIR)[:len(os.path.split(settings.BASE_DIR)) - 1]) +\
+               u'/uploads/images/%s' % filename
 
 class Person(models.Model):
 
@@ -21,7 +26,11 @@ class Person(models.Model):
     photo = models.ImageField(upload_to='images/', blank=True)
 
     def save(self, *args, **kwargs):
-
+        if Person.objects.count() > 0:
+            if self.photo:
+                person = Person.objects.last()
+                old_photo = make_upload_path(person.photo.name.split('/')[len(person.photo.name.split("/")) - 1])
+                os.remove(old_photo)
         if self.photo:
             img = Image.open(StringIO.StringIO(self.photo.read()))
             output = StringIO.StringIO()
