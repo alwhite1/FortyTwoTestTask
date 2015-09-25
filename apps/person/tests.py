@@ -8,6 +8,7 @@ from django.test.client import Client
 import StringIO
 from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.http import HttpResponsePermanentRedirect
 
 
 def check_db_content(contact, check_data):
@@ -260,20 +261,26 @@ class EditPersonModelFormTest(TestCase):
 
 class EditPageTest(TestCase):
 
-    def test_form_return_all_field_to_template(self):
-        """
-        Check that all form field represent in edit page
-        """
-        pass
-
     def test_login_require(self):
         """
         Check that edit page require login
         """
-        pass
+        response = self.client.get('/edit')
+        content = unicode(response.content, 'utf-8')
+        print content
+        self.assertEqual(response.status_code, 301)
+        self.assertTrue(isinstance(response, HttpResponsePermanentRedirect))
+        self.assertEqual(response.url, 'http://testserver/edit/')
+        self.assertTemplateNotUsed(response, 'edit.html')
 
     def test_login_availability(self):
         """
         Check that can login.
+        """
+        pass
+
+    def test_form_return_all_field_to_template(self):
+        """
+        Check that all form field represent in edit page
         """
         pass
