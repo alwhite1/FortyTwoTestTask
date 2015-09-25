@@ -6,9 +6,11 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
 from django.conf import settings
 
+
 def make_upload_path(filename):
         return u"".join(os.path.split(settings.BASE_DIR)[:len(os.path.split(settings.BASE_DIR)) - 1]) +\
                u'/uploads/images/%s' % filename
+
 
 class Person(models.Model):
 
