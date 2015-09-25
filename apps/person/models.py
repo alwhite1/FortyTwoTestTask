@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from PIL import Image, ImageOps
-from django.conf import settings
-import os
-
-
-def make_upload_path(filename):
-        return u"".join(os.path.split(settings.BASE_DIR)[:len(os.path.split(settings.BASE_DIR)) - 1]) +\
-               u'/uploads/images/%s' % filename
+import StringIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 class Person(models.Model):
@@ -26,11 +21,14 @@ class Person(models.Model):
     photo = models.ImageField(upload_to='images/', blank=True)
 
     def save(self, *args, **kwargs):
+
         if self.photo:
-            filename = make_upload_path(self.photo.name)
-            img = Image.open(filename)
+            img = Image.open(StringIO.StringIO(self.photo.read()))
+            output = StringIO.StringIO()
             img = ImageOps.fit(img, (200, 200))
-            img.save(self.photo)
+            img.save(output, format='JPEG', quality=99)
+            output.seek(0)
+            self.photo = InMemoryUploadedFile(output, 'ImageField', self.photo.name, 'image/jpeg', output.len, None)
         super(Person, self).save(*args, **kwargs)
 
     def __unicode__(self):
