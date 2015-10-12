@@ -15,9 +15,7 @@ def check_db_content(contact, check_data):
     attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
     for attribute in attributes:
         if getattr(contact, attribute) != check_data[attribute]:
-            print "contact: " + str(getattr(contact, attribute))
-            print "dict: " + str(check_data[attribute])
-            return False
+q            return False
     return True
 
 
@@ -28,8 +26,6 @@ def check_content_in_template(contact):
     content = unicode(response.content, 'utf-8')
     for attribute in attributes:
         if not getattr(contact, attribute) in content:
-            print getattr(contact, attribute)
-            print content
             return False
     return True
 
@@ -266,8 +262,6 @@ class EditPageTest(TestCase):
         Check that edit page require login
         """
         response = self.client.get('/edit')
-        content = unicode(response.content, 'utf-8')
-        print content
         self.assertEqual(response.status_code, 301)
         self.assertTrue(isinstance(response, HttpResponsePermanentRedirect))
         self.assertEqual(response.url, 'http://testserver/edit/')
