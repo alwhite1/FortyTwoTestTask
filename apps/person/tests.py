@@ -132,8 +132,9 @@ def get_temp_photo(photo_name):
 
 
 def clear_db():
-    contact = Person.objects.all()
-    contact.delete()
+    if Person.objects.count() > 0:
+        contact = Person.objects.all()
+        contact.delete()
 
 
 class MainPageTest(TestCase):
@@ -206,10 +207,8 @@ class MainPageAdditionalTest(TestCase):
         """
         Check case what return to template if DB empty.
         """
-        if Person.objects.count() > 0:
-            contact = Person.objects.all()
-            contact.delete()
-            found = resolve('/')
+        clear_db()
+        found = resolve('/')
         self.assertEqual(found.func, main)
 
     def test_main_page_if_in_database_more_that_one_record(self):
@@ -308,8 +307,7 @@ class EditPersonViewTest(TestCase):
         """
         self.client.login(username=self.username, password=self.password)
         attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
-        if Person.objects.count() > 0:
-            clear_db()
+        clear_db()
         response = self.client.get('/edit/')
         for item in attributes:
             try:
@@ -332,16 +330,27 @@ class EditPersonViewTest(TestCase):
         """
         Check what received if send post request when database is empty
         """
-        login = self.client.login(username=self.username, password=self.password)
-        if Person.objects.count() > 0:
-            clear_db()
+        clear_db()
+        self.client.login(username=self.username, password=self.password)
+        form = get_check_data("form")
+        form["photo"] = get_temp_photo('test.jpg')
+        self.client.post("/edit/", form)
+        contact = Person.objects.last()
+        self.assertEqual(check_db_content(contact, get_check_data("form")), True)
 
     def test_post_request_if_database_not_empty(self):
         """
         Check what received if send post request when database not empty
         """
-
-        pass
+        clear_db()
+        contact = get_person_object("simple")
+        contact.save()
+        photo_file = get_temp_photo('test.jpg')
+        self.client.login(username=self.username, password=self.password)
+        r = self.client.post("/edit/", {"photo": photo_file})
+        print r
+        contact = Person.objects.last()
+        self.assertEqual(contact.photo.name, "test.jpg")
 
     def test_post_request_ajax(self):
         """
