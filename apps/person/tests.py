@@ -20,10 +20,12 @@ def check_db_content(contact, check_data):
     return True
 
 
-def check_content_in_template(contact):
+def check_content_in_template(contact, link):
     attributes = ("name", "last_name", "email", "jabber", "skype", "other_contacts")
     client = Client()
-    response = client.get("/")
+    if link == "/edit/":
+        client.login(username="test", password="test")
+    response = client.get(link)
     content = unicode(response.content, 'utf-8')
     for attribute in attributes:
         if not getattr(contact, attribute) in content:
@@ -195,7 +197,7 @@ class PersonModelTest(TestCase):
         contact = get_person_object("cyrillic")
         contact.save()
         contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
+        self.assertEqual(check_content_in_template(contact, "/"), True)
 
 
 class MainPageAdditionalTest(TestCase):
@@ -222,7 +224,7 @@ class MainPageAdditionalTest(TestCase):
             contact.save()
             counter += 1
         contact_new = Person.objects.last()
-        self.assertEquals(check_content_in_template(contact_new), True)
+        self.assertEquals(check_content_in_template(contact_new, "/"), True)
 
     def test_is_data_in_template_and_database_same(self):
         """
@@ -233,11 +235,11 @@ class MainPageAdditionalTest(TestCase):
         contact = get_person_object("simple")
         contact.save()
         contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
+        self.assertEqual(check_content_in_template(contact, "/"), True)
         contact.name = "test_is_data_in_template_and_database_same"
         contact.save()
         contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
+        self.assertEqual(check_content_in_template(contact, "/"), True)
 
 
 class EditPersonModelFormTest(TestCase):
@@ -311,17 +313,20 @@ class EditPersonViewTest(TestCase):
         response = self.client.get('/edit/')
         for item in attributes:
             try:
-                if response.context[item] != "":
-                    check = True
-            raise KeyError:
-            check = True
+                if response.context[item]:
+                    check = False
+            except KeyError:
+                check = True
         self.assertEqual(check, True)
 
     def test_get_request_when_database_not_empty(self):
         """
         Check what received if send get request when database not empty
         """
-        pass
+
+        contact = get_person_object("simple")
+        contact.save()
+        self.assertEqual(check_content_in_template(contact, "/edit/"), True)
 
     def test_post_request_if_database_empty(self):
         """
@@ -331,11 +336,11 @@ class EditPersonViewTest(TestCase):
         if Person.objects.count() > 0:
             clear_db()
 
-
     def test_post_request_if_database_not_empty(self):
         """
         Check what received if send post request when database not empty
         """
+
         pass
 
     def test_post_request_ajax(self):
@@ -361,5 +366,3 @@ class EditPersonViewTest(TestCase):
         Check what happens if send invalid data in form
         """
         pass
-
-
