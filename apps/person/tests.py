@@ -258,6 +258,17 @@ class EditPersonModelFormTest(TestCase):
 
 class EditPageTest(TestCase):
 
+    def test_form_return_all_field_to_template(self):
+        """
+        Check that all form field represent in edit page
+        """
+        pass
+
+
+class EditPersonViewTest(TestCase):
+
+    fixtures = ['apps/person/fixtures/test.json']
+
     def setUp(self):
         self.client = Client()
         self.username = 'test'
@@ -284,8 +295,50 @@ class EditPageTest(TestCase):
         login = self.client.login(username="fake_user", password="fake_password")
         self.assertEqual(login, False)
 
-    def test_form_return_all_field_to_template(self):
+    def test_post_request_if_database_empty(self):
         """
-        Check that all form field represent in edit page
+        Check what received if send post request when database is empty
+        """
+        pass
+
+    def test_post_request_if_database_not_empty(self):
+        """
+        Check what received if send post request when database not empty
+        """
+        pass
+
+    def test_post_request_ajax(self):
+        """
+        Check what received if send ajax request
+        """
+        pass
+
+    def test_post_request_not_ajax(self):
+        """
+        Check what received if send not ajax request
+        """
+        pass
+
+    def test_post_request_with_valid_data(self):
+        """
+        Check what happens if send correct data in form
+        """
+        pass
+
+    def test_post_request_with_not_valid_data(self):
+        """
+        Check what happens if send invalid data in form
+        """
+        pass
+
+    def test_get_request_when_database_is_empty(self):
+        """
+        Check what received if send get request when database is empty
+        """
+        pass
+
+    def test_get_request_when_database_not_empty(self):
+        """
+        Check what received if send get request when database not empty
         """
         pass
