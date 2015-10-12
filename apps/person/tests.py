@@ -9,13 +9,14 @@ import StringIO
 from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponsePermanentRedirect
+from django.contrib.auth.models import User
 
 
 def check_db_content(contact, check_data):
     attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
     for attribute in attributes:
         if getattr(contact, attribute) != check_data[attribute]:
-q            return False
+            return False
     return True
 
 
@@ -257,6 +258,13 @@ class EditPersonModelFormTest(TestCase):
 
 class EditPageTest(TestCase):
 
+    def setUp(self):
+        self.client = Client()
+        self.username = 'test'
+        self.email = 'test@example.com'
+        self.password = 'test'
+        self.test_user = User.objects.create_user(self.username, self.email, self.password)
+
     def test_login_require(self):
         """
         Check that edit page require login
@@ -271,7 +279,10 @@ class EditPageTest(TestCase):
         """
         Check that can login.
         """
-        pass
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertEqual(login, True)
+        login = self.client.login(username="fake_user", password="fake_password")
+        self.assertEqual(login, False)
 
     def test_form_return_all_field_to_template(self):
         """
