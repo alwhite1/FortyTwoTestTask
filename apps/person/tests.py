@@ -129,6 +129,11 @@ def get_temp_photo(photo_name):
     return image_file
 
 
+def clear_db():
+    contact = Person.objects.all()
+    contact.delete()
+
+
 class MainPageTest(TestCase):
 
     def test_root_url_resolves_to_main_page(self):
@@ -295,11 +300,37 @@ class EditPersonViewTest(TestCase):
         login = self.client.login(username="fake_user", password="fake_password")
         self.assertEqual(login, False)
 
+    def test_get_request_when_database_is_empty(self):
+        """
+        Check what received if send get request when database is empty
+        """
+        self.client.login(username=self.username, password=self.password)
+        attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
+        if Person.objects.count() > 0:
+            clear_db()
+        response = self.client.get('/edit/')
+        for item in attributes:
+            try:
+                if response.context[item] != "":
+                    check = True
+            raise KeyError:
+            check = True
+        self.assertEqual(check, True)
+
+    def test_get_request_when_database_not_empty(self):
+        """
+        Check what received if send get request when database not empty
+        """
+        pass
+
     def test_post_request_if_database_empty(self):
         """
         Check what received if send post request when database is empty
         """
-        pass
+        login = self.client.login(username=self.username, password=self.password)
+        if Person.objects.count() > 0:
+            clear_db()
+
 
     def test_post_request_if_database_not_empty(self):
         """
@@ -331,14 +362,4 @@ class EditPersonViewTest(TestCase):
         """
         pass
 
-    def test_get_request_when_database_is_empty(self):
-        """
-        Check what received if send get request when database is empty
-        """
-        pass
 
-    def test_get_request_when_database_not_empty(self):
-        """
-        Check what received if send get request when database not empty
-        """
-        pass
