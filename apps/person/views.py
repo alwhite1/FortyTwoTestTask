@@ -33,9 +33,7 @@ def edit(request):
                     for error in form.errors:
                         e = form.errors[error]
                         errors_dict[error] = unicode(e)
-
                 return HttpResponseBadRequest(json.dumps(errors_dict))
-
         else:
             return HttpResponse('Use ajax request')
     else:
@@ -45,4 +43,3 @@ def edit(request):
             form = EditPersonModelForm()
         return render(request, 'edit.html', {'form': form})
     pass
-
