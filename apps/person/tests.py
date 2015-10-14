@@ -11,8 +11,6 @@ def check_db_content(contact, check_data):
     attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
     for attribute in attributes:
         if getattr(contact, attribute) != check_data[attribute]:
-            print "contact: " + unicode(getattr(contact, attribute))
-            print "dict: " + unicode(check_data[attribute])
             return False
     return True
 
@@ -24,8 +22,6 @@ def check_content_in_template(contact):
     content = unicode(response.content, 'utf-8')
     for attribute in attributes:
         if not getattr(contact, attribute) in content:
-            print getattr(contact, attribute)
-            print content
             return False
     return True
 
@@ -41,7 +37,7 @@ class MainPageTest(TestCase):
 
     def test_correct_main_page_template(self):
         """
-        See what template used for main page
+        See what template used for main page.
         """
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'main.html')
@@ -69,7 +65,7 @@ class MainPageTest(TestCase):
 
     def test_main_page_if_in_database_more_that_one_record(self):
         """
-        Check case what return in template if DB have  more that one record.
+        Check case what return in template if DB have more that one record.
         """
         counter = 1
         while Person.objects.count() <= 1:
