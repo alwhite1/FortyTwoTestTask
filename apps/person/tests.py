@@ -424,7 +424,7 @@ class CustomCommandTest(TestCase):
         Check that command is work.
         """
         result = StringIO.StringIO()
-        call_command('get_models', stdout=result)
+        call_command('get_all_models', stdout=result)
         if result.getvalue():
             check = True
         else:
