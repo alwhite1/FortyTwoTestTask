@@ -272,6 +272,7 @@ class EditPageTest(TestCase):
         """
         pass
 
+
 class EditPersonViewTest(TestCase):
 
     fixtures = ['apps/person/fixtures/test.json']
@@ -377,6 +378,7 @@ class EditPersonViewTest(TestCase):
         Check what happens if send invalid data in form
         """
         pass
+
 
 class CustomTagTest(TestCase):
 
