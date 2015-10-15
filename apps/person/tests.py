@@ -21,10 +21,12 @@ def check_db_content(contact, check_data):
     return True
 
 
-def check_content_in_template(contact):
+def check_content_in_template(contact, link):
     attributes = ("name", "last_name", "email", "jabber", "skype", "other_contacts")
     client = Client()
-    response = client.get("/")
+    if link == "/edit/":
+        client.login(username="test", password="test")
+    response = client.get(link)
     content = unicode(response.content, 'utf-8')
     for attribute in attributes:
         if not getattr(contact, attribute) in content:
@@ -131,8 +133,10 @@ def get_temp_photo(photo_name):
 
 
 def clear_db():
-    contact = Person.objects.all()
-    contact.delete()
+    if Person.objects.count() > 0:
+        contact = Person.objects.all()
+        contact.delete()
+    pass
 
 
 class MainPageTest(TestCase):
@@ -196,7 +200,7 @@ class PersonModelTest(TestCase):
         contact = get_person_object("cyrillic")
         contact.save()
         contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
+        self.assertEqual(check_content_in_template(contact, "/"), True)
 
 
 class MainPageAdditionalTest(TestCase):
@@ -205,10 +209,8 @@ class MainPageAdditionalTest(TestCase):
         """
         Check case what return to template if DB empty.
         """
-        if Person.objects.count() > 0:
-            contact = Person.objects.all()
-            contact.delete()
-            found = resolve('/')
+        clear_db()
+        found = resolve('/')
         self.assertEqual(found.func, main)
 
     def test_main_page_if_in_database_more_that_one_record(self):
@@ -223,7 +225,7 @@ class MainPageAdditionalTest(TestCase):
             contact.save()
             counter += 1
         contact_new = Person.objects.last()
-        self.assertEquals(check_content_in_template(contact_new), True)
+        self.assertEquals(check_content_in_template(contact_new, "/"), True)
 
     def test_is_data_in_template_and_database_same(self):
         """
@@ -234,11 +236,11 @@ class MainPageAdditionalTest(TestCase):
         contact = get_person_object("simple")
         contact.save()
         contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
+        self.assertEqual(check_content_in_template(contact, "/"), True)
         contact.name = "test_is_data_in_template_and_database_same"
         contact.save()
         contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
+        self.assertEqual(check_content_in_template(contact, "/"), True)
 
 
 class EditPersonModelFormTest(TestCase):
@@ -376,7 +378,6 @@ class EditPersonViewTest(TestCase):
         """
         pass
 
-
 class CustomTagTest(TestCase):
 
     def setUp(self):
@@ -404,8 +405,6 @@ class CustomTagTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-
-
     def test_tag_return_if_db_is_empty(self):
         """
         Check what return tag if DB is empty.
@@ -413,5 +412,3 @@ class CustomTagTest(TestCase):
         clear_db()
         url = edit_link()
         self.assertEqual(url, "/admin/")
-
-
