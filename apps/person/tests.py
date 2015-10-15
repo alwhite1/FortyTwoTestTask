@@ -363,3 +363,23 @@ class EditPersonViewTest(TestCase):
         pass
 
 
+class CustomTagTest(TestCase):
+
+    def test_tag_return_expected_url(self):
+        """
+        Check that tag return expected url for a given object
+        """
+        pass
+
+    def test_tag_return_exist_url(self):
+        """
+        Check that url page is response.
+        """
+        pass
+
+    def test_tag_return_if_db_is_empty(self):
+        """
+        Check what return tag if DB is empty.
+        """
+        pass
+
