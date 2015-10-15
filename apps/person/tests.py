@@ -270,7 +270,6 @@ class EditPageTest(TestCase):
         """
         pass
 
-
 class EditPersonViewTest(TestCase):
 
     fixtures = ['apps/person/fixtures/test.json']
@@ -307,55 +306,69 @@ class EditPersonViewTest(TestCase):
         """
         self.client.login(username=self.username, password=self.password)
         attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
-        if Person.objects.count() > 0:
-            clear_db()
+        clear_db()
         response = self.client.get('/edit/')
         for item in attributes:
             try:
-                if response.context[item] != "":
-                    check = True
-            raise KeyError:
-            check = True
+                if response.context[item]:
+                    check = False
+            except KeyError:
+                check = True
         self.assertEqual(check, True)
 
     def test_get_request_when_database_not_empty(self):
         """
         Check what received if send get request when database not empty
         """
-        pass
 
-    def test_post_request_if_database_empty(self):
+        contact = get_person_object("simple")
+        contact.save()
+        self.assertEqual(check_content_in_template(contact, "/edit/"), True)
+
+    def test_ajax_request_if_database_empty(self):
         """
         Check what received if send post request when database is empty
         """
-        login = self.client.login(username=self.username, password=self.password)
-        if Person.objects.count() > 0:
-            clear_db()
+        clear_db()
+        self.client.login(username=self.username, password=self.password)
+        form = get_check_data("form")
+        form["photo"] = get_temp_photo('test.jpg')
+        self.client.post("/edit/", form, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        contact = Person.objects.last()
+        self.assertEqual(check_db_content(contact, get_check_data("form")), True)
 
-
-    def test_post_request_if_database_not_empty(self):
+    def test_ajax_request_if_database_not_empty(self):
         """
         Check what received if send post request when database not empty
         """
-        pass
-
-    def test_post_request_ajax(self):
-        """
-        Check what received if send ajax request
-        """
-        pass
+        clear_db()
+        contact = get_person_object("simple")
+        contact.save()
+        self.client.login(username=self.username, password=self.password)
+        form = get_check_data("form")
+        form["photo"] = get_temp_photo('test.jpg')
+        self.client.post("/edit/", form, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        contact = Person.objects.last()
+        self.assertEqual(check_db_content(contact, get_check_data("form")), True)
 
     def test_post_request_not_ajax(self):
         """
         Check what received if send not ajax request
         """
-        pass
+        self.client.login(username=self.username, password=self.password)
+        form = get_check_data("form")
+        response = self.client.post("/edit/", form)
+        self.assertEqual(response.content, "Use ajax request")
 
-    def test_post_request_with_valid_data(self):
+    def test_post_request_error_message(self):
         """
         Check what happens if send correct data in form
         """
-        pass
+        self.client.login(username=self.username, password=self.password)
+        form = get_check_data("form")
+        response = self.client.post("/edit/", form, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertIn("photo", response.content)
+        self.assertIn("This field is required", response.content)
 
     def test_post_request_with_not_valid_data(self):
         """
