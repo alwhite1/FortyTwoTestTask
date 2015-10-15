@@ -10,6 +10,7 @@ from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponsePermanentRedirect
 from django.contrib.auth.models import User
+from apps.person.templatetags.edit_link import edit_link
 
 
 def check_db_content(contact, check_data):
@@ -365,21 +366,39 @@ class EditPersonViewTest(TestCase):
 
 class CustomTagTest(TestCase):
 
+    def setUp(self):
+        self.client = Client()
+        self.username = 'test'
+        self.email = 'test@example.com'
+        self.password = 'test'
+        self.test_user = User.objects.create_user(self.username, self.email, self.password)
+
     def test_tag_return_expected_url(self):
         """
         Check that tag return expected url for a given object
         """
-        pass
+        contact = Person.objects.last()
+        url = edit_link(contact)
+        self.assertEqual(url, "/admin/person/person/1/")
 
     def test_tag_return_exist_url(self):
         """
         Check that url page is response.
         """
-        pass
+        contact = Person.objects.last()
+        url = edit_link(contact)
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
 
     def test_tag_return_if_db_is_empty(self):
         """
         Check what return tag if DB is empty.
         """
-        pass
+        clear_db()
+        url = edit_link()
+        self.assertEqual(url, "/admin/")
+
 
