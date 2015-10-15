@@ -12,7 +12,7 @@ from django.http import HttpResponsePermanentRedirect
 from django.contrib.auth.models import User
 from apps.person.templatetags.edit_link import edit_link
 from django.core.management import call_command
-from apps.person.managment.commands import get_models
+from apps.person.managment.commands.getmodls import get_models
 
 def check_db_content(contact, check_data):
     attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
