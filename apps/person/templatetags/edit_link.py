@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.simple_tag
 def edit_link(object_from_context=None):
     if object_from_context:

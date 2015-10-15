@@ -12,7 +12,7 @@ from django.http import HttpResponsePermanentRedirect
 from django.contrib.auth.models import User
 from apps.person.templatetags.edit_link import edit_link
 from django.core.management import call_command
-from apps.person.managment.commands.getmodls import get_models
+
 
 def check_db_content(contact, check_data):
     attributes = ("name", "last_name", "bio", "email", "jabber", "skype", "other_contacts")
@@ -416,12 +416,29 @@ class CustomTagTest(TestCase):
         url = edit_link()
         self.assertEqual(url, "/admin/")
 
+
 class CustomCommandTest(TestCase):
 
     def test_that_command_is_work(self):
-        result = call_command('get_models')
-        if result:
+        """
+        Check that command is work.
+        """
+        result = StringIO.StringIO()
+        call_command('get_models', stdout=result)
+        if result.getvalue():
             check = True
         else:
             check = False
         self.assertEqual(check, True)
+
+    def test_that_command_return_correct_models(self):
+        """
+        Check that command return models Person and Request
+        """
+        pass
+
+    def test_that_command_return_corect_quantity_of_objects(self):
+        """
+        Check that commands return correct quantity of objects in models Person.
+        """
+        pass
