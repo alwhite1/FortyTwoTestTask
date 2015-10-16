@@ -1,5 +1,6 @@
 from django.contrib import admin
-from person.models import Person
+from apps.person.models import Person, Signals
 
 
 admin.site.register(Person)
+admin.site.register(Signals)

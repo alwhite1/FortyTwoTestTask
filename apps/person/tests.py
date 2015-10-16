@@ -453,7 +453,7 @@ class SignalTest(TestCase):
         Check if in model Signal store data if in model Person create, edit, delete data.
         """
         check = Signals.objects.count()
-        contact = get_person_object("simple1")
+        contact = get_person_object("simple")
         contact.save()
         check_new = Signals.objects.count()
         self.assertEqual(check + 1, check_new)
@@ -466,7 +466,7 @@ class SignalTest(TestCase):
         contact.delete()
         contact.save()
         check_new = Signals.objects.count()
-        self.assertEqual(check + 1, check_new)
+        self.assertEqual(check + 2, check_new)
 
     def test_that_received_signal_from_requests_model(self):
         """
@@ -486,4 +486,4 @@ class SignalTest(TestCase):
         request.delete()
         request.save()
         check_new = Signals.objects.count()
-        self.assertEqual(check + 1, check_new)
+        self.assertEqual(check + 2, check_new)

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.db import models
-from PIL import Image, ImageOps
-import StringIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
+
 import os
+import StringIO
+from PIL import Image, ImageOps
+from django.db import models
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.conf import settings
 
 
@@ -53,3 +54,16 @@ class Person(models.Model):
 
     def __unicode__(self):
         return self.name + " " + self.last_name
+
+
+class Signals(models.Model):
+
+    def Meta():
+        db_table = 'signals'
+
+    model = models.CharField(max_length=16)
+    action = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.model + " " + self.date.isoformat()
