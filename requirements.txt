@@ -1,4 +1,4 @@
-setuptools --upgrade
+setuptools==18.4
 42cc-pystyle==0.0.15
 coverage==3.7.1
 Django==1.6.7
