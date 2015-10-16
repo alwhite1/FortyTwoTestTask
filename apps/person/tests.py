@@ -12,6 +12,8 @@ from django.http import HttpResponsePermanentRedirect
 from django.contrib.auth.models import User
 from apps.person.templatetags.edit_link import edit_link
 from django.core.management import call_command
+from apps.person.models import Signals
+from apps.requests.models import Requests
 
 
 def check_db_content(contact, check_data):
@@ -442,3 +444,46 @@ class CustomCommandTest(TestCase):
         Check that commands return correct quantity of objects in models Person.
         """
         pass
+
+
+class SignalTest(TestCase):
+
+    def test_that_received_signal_from_person_model(self):
+        """
+        Check if in model Signal store data if in model Person create, edit, delete data.
+        """
+        check = Signals.objects.count()
+        contact = get_person_object("simple1")
+        contact.save()
+        check_new = Signals.objects.count()
+        self.assertEqual(check + 1, check_new)
+        check = Signals.objects.count()
+        contact.name = "new_name"
+        contact.save()
+        check_new = Signals.objects.count()
+        self.assertEqual(check + 1, check_new)
+        check = Signals.objects.count()
+        contact.delete()
+        contact.save()
+        check_new = Signals.objects.count()
+        self.assertEqual(check + 1, check_new)
+
+    def test_that_received_signal_from_requests_model(self):
+        """
+        Check if in model Signal store data if in model Requests create, edit, delete data.
+        """
+        check = Signals.objects.count()
+        request = Requests(request="new_test")
+        request.save()
+        check_new = Signals.objects.count()
+        self.assertEqual(check + 1, check_new)
+        check = Signals.objects.count()
+        request.request = "new_test_1"
+        request.save()
+        check_new = Signals.objects.count()
+        self.assertEqual(check + 1, check_new)
+        check = Signals.objects.count()
+        request.delete()
+        request.save()
+        check_new = Signals.objects.count()
+        self.assertEqual(check + 1, check_new)
