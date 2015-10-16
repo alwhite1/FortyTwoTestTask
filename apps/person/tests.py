@@ -437,7 +437,7 @@ class CustomCommandTest(TestCase):
         """
         pass
 
-    def test_that_command_return_corect_quantity_of_objects(self):
+    def test_that_command_return_correct_quantity_of_objects(self):
         """
         Check that commands return correct quantity of objects in models Person.
         """
