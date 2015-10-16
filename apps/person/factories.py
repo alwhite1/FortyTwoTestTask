@@ -5,8 +5,7 @@ from apps.person.models import Person
 
 class SimplePersonFactory(factory.Factory):
 
-    class Meta:
-        model = Person
+    FACTORY_FOR = Person
 
     name = u"new"
     last_name = u"new"
@@ -20,11 +19,10 @@ class SimplePersonFactory(factory.Factory):
 
 class CyrillicPersonFactory(factory.Factory):
 
-    class Meta:
-        model = Person
+    FACTORY_FOR = Person
 
     name = u"Имя"
-    last_name = u"Фамилия",
+    last_name = u"Фамилия"
     date_of_birth = "2001-02-02"
     bio = u"new"
     email = u"new@example.com"
