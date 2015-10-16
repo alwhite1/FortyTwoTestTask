@@ -22,7 +22,7 @@ class CyrillicPersonFactory(factory.Factory):
     FACTORY_FOR = Person
 
     name = u"Имя"
-    last_name = u"Фамилия",
+    last_name = u"Фамилия"
     date_of_birth = "2001-02-02"
     bio = u"new"
     email = u"new@example.com"

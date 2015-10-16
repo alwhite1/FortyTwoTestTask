@@ -107,11 +107,12 @@ class PersonModelTest(TestCase):
         """
         Check can add and delete date from DB.
         """
+        Person.objects.all().delete()
         contact = SimplePersonFactory.create()
         check_data = SimplePersonFactory.attributes()
         self.assertEqual(check_db_content(contact, check_data), True)
         Person.objects.last().delete()
-        self.assertEqual(len(Person.objects.all()), 0)
+        self.assertEqual(Person.objects.count(), 0)
 
     def test_cyrillic_support(self):
         """
