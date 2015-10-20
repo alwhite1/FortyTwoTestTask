@@ -2,7 +2,7 @@
 from django.test import TestCase
 from apps.person.models import Person
 from apps.person.factories import SimplePersonFactory, CyrillicPersonFactory
-from apps.person.tests.extra_function import check_db_content, check_content_in_template
+from apps.person.tests.extra_function import check_db_content
 
 
 class PersonModelTest(TestCase):
@@ -35,11 +35,3 @@ class PersonModelTest(TestCase):
         contact = CyrillicPersonFactory.create()
         check_data = CyrillicPersonFactory.attributes()
         self.assertEqual(check_db_content(contact, check_data), True)
-
-    def test_cyrillic_rendering(self):
-        """
-        Check rendering cyrillic to template
-        """
-        CyrillicPersonFactory.create()
-        contact = Person.objects.last()
-        self.assertEqual(check_content_in_template(contact), True)
