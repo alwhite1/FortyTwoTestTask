@@ -1,12 +1,12 @@
-from django.shortcuts import render
-from apps.requests.models import Requests
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from apps.requests.models import Requests
 
 
 @csrf_exempt
 def requests(request):
-    quantity_of_request = len(Requests.objects.all())
+    quantity_of_request = Requests.objects.count()
     if request.method == 'POST':
         if request.is_ajax():
             start_request = request.POST.get('start_request', None)
@@ -15,12 +15,10 @@ def requests(request):
             diff = quantity_of_request - int(start_request)
             return HttpResponse(diff)
         return HttpResponse(quantity_of_request)
-    if len(Requests.objects.all()) > 10:
-        last_10_requests = Requests.objects.all()[len(Requests.objects.all()) - 10:]
-        quantity_of_request = len(Requests.objects.all())
+    if quantity_of_request > 10:
+        last_10_requests = Requests.objects.all()[quantity_of_request - 10:]
         return render(request, 'requests.html', {'requests': last_10_requests,
                                                  'quantity_of_request': quantity_of_request})
     last_10_requests = Requests.objects.all()
-    quantity_of_request = len(Requests.objects.all())
     return render(request, 'requests.html', {'requests': last_10_requests,
                                              'quantity_of_request': quantity_of_request})
