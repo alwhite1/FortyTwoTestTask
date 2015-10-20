@@ -5,15 +5,14 @@ from apps.requests.tests.extra_function import send_request
 
 
 class RequestsMiddlewareTest(TestCase):
-    fixtures = ['apps/requests/fixtures/test_request.json', 'apps/person/fixtures/person.json']
 
     def test_request_middleware(self):
         """
         Check middleware for intercept request
         """
         send_request(5)
-        count = len(Requests.objects.all())
-        self.assertEqual(count, 6)
+        count = Requests.objects.count()
+        self.assertEqual(count, 5)
 
     def test_diff_type_of_request(self):
         """
