@@ -1,0 +1,56 @@
+html, body {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    }
+
+#title {
+position: absolute;
+left: 15px;
+top 15px;
+font-size: larger;
+}
+#left {
+position: absolute;
+left: 15px;
+top: 30px;
+width: 300px;
+}
+#right {
+position: absolute;
+left: 400px;
+top: 30px;
+width: 300px;
+}
+.textarea_as_view{
+    border: none;
+    resize: none;
+}
+#content{
+    position: absolute;
+    top: 30px;
+    width: 99%;
+    height: 93%;
+    overflow-y: auto;
+}
+#link {
+    position: fixed;
+    height: 15;
+    bottom: 0px;
+    width: 100%;
+}
+header {
+    position: fixed;
+    top: 0;
+    height: 30px;
+}
+tbody{
+    position: absolute;
+    height: auto;
+}
+tr:hover td {
+    background: #e8edff;
+}
+thead{
+    position: fixed;
+}
