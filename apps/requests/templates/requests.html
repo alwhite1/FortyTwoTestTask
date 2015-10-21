@@ -18,7 +18,7 @@
     {%  for id, request , date in requests.values_list %}
 <tr>
     <td id="id_{{ forloop.counter }}"> {{ id }} </td>
-    <td id="request_{{  forloop.counter }}">{{request}}</td>
+    <td id="request_{{  forloop.counter }}">{{request | linebreaks}}</td>
     <td id="date_{{ forloop.counter }} ">{{date}}</tdid>
 </tr>
 {% endfor %}
