@@ -1,0 +1,9 @@
+[
+  {
+		"model": "requests.Requests",
+		"fields": {
+            "request": "new",
+			"date": "2015-01-01"
+            }
+	}
+]
