@@ -9,6 +9,7 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Person'
+        db.delete_table(u'person_person')
         db.create_table(u'person_person', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=16)),
