@@ -50,6 +50,8 @@ function sameOrigin(url) {
         !(/^(\/\/|http:|https:).*/.test(url));
 }
 
+$(function(){ $("#accordion").accordion({ collapsible: true }); });
+
 $(document).ready(function(){
 
     setInterval('get_diff()',1000);

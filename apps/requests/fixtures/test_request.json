@@ -3,6 +3,7 @@
 		"model": "requests.Requests",
 		"fields": {
             "request": "new",
+		    "path": "new",
 			"date": "2015-01-01"
             }
 	}

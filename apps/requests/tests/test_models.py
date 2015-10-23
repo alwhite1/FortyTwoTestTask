@@ -17,10 +17,10 @@ class RequestsModelTest(TestCase):
         """
         Check can add and delete date from DB.
         """
-        request = Requests(request="new_1")
+        request = Requests(request="new_1", path="new")
         request.save()
         request = Requests.objects.get(id=2)
         self.assertEqual(request.request, "new_1")
-
+        self.assertEqual(request.path, "new")
         Requests.objects.get(id=2).delete()
-        self.assertEqual(len(Requests.objects.all()), 1)
+        self.assertEqual(Requests.objects.count(), 1)

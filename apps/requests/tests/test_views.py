@@ -19,14 +19,14 @@ class RequestsPageTest(TestCase):
         See what template used for requests page
         """
         response = self.client.get('/requests/')
-        self.assertTemplateUsed(response, 'requests.html')
+        self.assertTemplateUsed(response, 'requests_new.html')
 
     def test_is_data_in_template_and_database_same(self):
         """
         Check that data in template and DB same.
         """
         if not Requests.objects.count():
-            request = Requests(request="new_test")
+            request = Requests(request="new_test", path="new_test")
             request.save()
         request = Requests.objects.last()
         client = Client()

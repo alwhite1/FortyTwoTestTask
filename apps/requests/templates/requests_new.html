@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} 0 {% endblock title %}
+{% block extra_head %}
+    {% load staticfiles %}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/requests.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+{% endblock extra_head %}
+{% block content %}
+
+    <header> Quantity of request: <span id="quantity">{{ quantity_of_request }} </span> </header>
+    <div id="content">
+        <div id="accordion">
+            {%  for id, path, request , date in requests.values_list %}
+                <h3> ID: {{ id }} <br>  URL: {{ path }} <br> Date: {{ date | date:"d M Y h:m:s " }}  </h3>
+                {{request | linebreaks}}
+            {% endfor %}
+        </div>
+    </div>
+    <div id="link" ><hr><a href="/">back</a></div>
+{% endblock %}
