@@ -50,7 +50,7 @@ function sameOrigin(url) {
         !(/^(\/\/|http:|https:).*/.test(url));
 }
 
-$(function(){ $("#accordion").accordion({ collapsible: true }); });
+$(function(){ $("#accordion").accordion({active:false, collapsible: true }); });
 
 $(document).ready(function(){
 
