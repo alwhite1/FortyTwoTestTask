@@ -1,8 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 from apps.requests.models import Requests
 
 
+@ensure_csrf_cookie
 def requests(request):
     quantity_of_request = Requests.objects.count()
     if request.method == 'POST':
